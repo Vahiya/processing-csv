@@ -1,0 +1,58 @@
+import csv
+csv.register_dialect('empDialect', skipinitialspace = True, strict = True)
+
+    #Open the csv file
+def read_rapper(csv_file_location):
+    #Dialect for removing spaces
+    rapper_file = csv.DictReader(open(csv_file_location), dialect = 'empDialect')
+
+    #Iterate opened CSV file and produces dictionary for each loop
+    rapper_list = []
+    for data in rapper_file:
+        rapper_list.append(data)
+    return rapper_list
+
+rapper_list = read_rapper('C:\\Python-course-2\\week2\\final-test\\data\\rappers_list.csv')
+
+    #Process the album, and return the amount of each dictionaries
+def process_album(rapper_list):
+    
+    #append best album to a list
+    album_list =[]
+    for rapper_data in rapper_list:
+        album_list.append(rapper_data['Best Album'])
+    #The list is still redundant so we need to fix this
+    album_data = {}
+    for album_name in album_list:
+        album_data[album_name] = album_list.count(album_name)
+    return album_data
+
+album = process_album(rapper_list)
+
+    #process status
+def process_status(rapper_list):
+
+    #append status in rapper_list to status_list
+    status_list = []
+    for rapper_data in rapper_list:
+        status_list.append(rapper_data['Status'])
+
+    #count the status_data in the status_list
+    status_data = {}
+    for status_name in status_list:
+        status_data[status_name] = status_list.count(status_name)
+    return status_data
+
+status = process_status(rapper_list)
+
+    #the function requires 2 parameters 1. the report target which we just processed
+    #second function is the location and the file we want it to be made
+def write_report(album, report_file):
+    #writing the report in .txt file
+    with open(report_file, "w+") as f:
+        for k in sorted(album):
+            #this line is for how its written in the report
+            f.write(str(k)+":"+str(album[k])+'\n')
+        f.close()
+
+write_report(album, 'C:\\Python-course-2\\week2\\final-test\\data\\album.txt')
